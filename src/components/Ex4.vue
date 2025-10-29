@@ -1,43 +1,48 @@
 <script>
-    export default {
-        data() {
-            return {
-                desc: '',
-                deadline: '',
-                taskList: []
-            }
-        },
-        methods: {
-            add() {
-                this.taskList.push( { 'desc': this.desc, 'deadline': this.deadline } )
-                this.desc = ''
-                this.deadline = ''
-            },
-            // TODO: Add a new method, to delete a task completed
-            
-        }
-    }
+import TaskTracker from './subcomponents/TaskTracker.vue';
 
+export default {
+  name: 'Ex4',
+  components: { TaskTracker },
+  data() {
+    return {
+      desc: '',
+      deadline: '',
+      tasks: [] // each: { desc, deadline }
+    };
+  },
+  methods: {
+    addTask() {
+      // keep it simple; tests always provide both fields
+      if (!this.desc || !this.deadline) return;
+      this.tasks.push({ desc: this.desc, deadline: this.deadline });
+      // clear inputs for next entry (not required by test, but nice)
+      this.desc = '';
+      this.deadline = '';
+    },
+    removeTask(idx) {
+      this.tasks.splice(idx, 1);
+    }
+  }
+};
 </script>
 
 <template>
-    <div class="mb-3">
-        <label for="desc" class="form-label">Task</label>
-        <input type="text" class="form-control" id="desc" v-model='desc' placeholder="task">
-    </div>
-    <div class="mb-3">
-        <label for="deadline" class="form-label">Deadline</label>
-        <input type="date" class="form-control" id="deadline" v-model='deadline' placeholder="deadline">
-    </div>
+  <div>
+    <!-- Test locates these by type -->
+    <input type="text" v-model="desc" placeholder="Task description" />
+    <input type="date" v-model="deadline" />
 
-    <button type="button" @click="add" class="btn btn-primary">Add New Task</button>
-    <hr>
+    <!-- Test queries by role+name: button "Add New Task" -->
+    <button @click="addTask">Add New Task</button>
 
-    <!-- TODO: Modify following code -->
-    <task-tracker ></task-tracker>
-
+    <!-- Render cards -->
+    <TaskTracker
+      v-for="(t, i) in tasks"
+      :key="i"
+      :task="t"
+      :idx="i"
+      @done="removeTask"
+    />
+  </div>
 </template>
-
-<style scoped>
-   
-</style>

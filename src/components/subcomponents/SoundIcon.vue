@@ -1,15 +1,20 @@
 <script>
-    export default { 
-        data() {
-            return {
-                soundEmojis: ['🔇', '🔈', '🔉', '🔊']
-            }
-        },
-        // TODO: add code to define a necessary prop
+export default {
+  props: {
+    level: {
+      type: Number,
+      required: true
     }
+  },
+  data() {
+    return {
+      soundEmojis: ['🔇', '🔈', '🔉', '🔊']
+    }
+  }
+}
 </script>
 
 <template>
-    <!-- TODO: add your template code here. Use span element. --> 
-    
+  <!-- show emoji based on prop level -->
+  <span>{{ soundEmojis[level] }}</span>
 </template>
